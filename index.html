@@ -68,8 +68,15 @@ footer { text-align:center; font-size:11px; color:#879596; padding:16px; }
 
   <div class="card startbox" id="start">
     <h2>Simulacro del examen de conceptos</h2>
-    <p>Entrena con el formato de los exámenes de certificación de nube: <b id="nq"></b> preguntas de opción única y de selección múltiple, un tiempo límite de <b>40 minutos</b>, revisión antes de entregar y resultado con nota sobre 5.0 y retroalimentación por dominio.</p>
+    <p>Entrena con el formato de los exámenes de certificación de nube: <b id="nq"></b> preguntas de opción única y de selección múltiple, el tiempo que tú elijas, revisión antes de entregar y resultado con nota sobre 5.0 y retroalimentación por dominio.</p>
     <p style="font-size:12.5px">Las preguntas cubren: fundamentos de la nube y características NIST, modelos de servicio y responsabilidad compartida, proveedores y costos, virtualización e hipervisores, y contenedores con Docker — todo con base en las presentaciones del curso.</p>
+    <div style="margin:16px auto 20px;text-align:left;max-width:430px;font-size:14px;background:#f7fafa;border:1px solid #d5dbdb;border-radius:8px;padding:14px 18px">
+      <b style="display:block;margin-bottom:8px">⏱ Elige tu tiempo:</b>
+      <label style="display:block;margin:6px 0;cursor:pointer"><input type="radio" name="tmin" value="40" checked> <b>40 min</b> — ritmo del examen real</label>
+      <label style="display:block;margin:6px 0;cursor:pointer"><input type="radio" name="tmin" value="60"> <b>60 min</b> — cómodo</label>
+      <label style="display:block;margin:6px 0;cursor:pointer"><input type="radio" name="tmin" value="90"> <b>90 min</b> — tranquilo</label>
+      <label style="display:block;margin:6px 0;cursor:pointer"><input type="radio" name="tmin" value="0"> <b>Sin límite</b> — modo estudio</label>
+    </div>
     <button class="bigbtn" onclick="startExam()">Comenzar simulacro →</button>
     <p style="font-size:11px;color:#879596;margin-top:12px">Puedes intentarlo cuantas veces quieras: las preguntas se barajan en cada ronda.</p>
   </div>
@@ -165,18 +172,24 @@ const BANK = [
  {d:"Contenedores y Docker", q:"(Selecciona 2) ¿Cuáles de estos son errores frecuentes con contenedores vistos en clase?", o:["Guardar datos dentro del contenedor","Versionar la imagen base en producción","Confiar en la etiqueta latest","Usar docker compose down al terminar"], a:[0,2], j:"Errores: datos dentro del contenedor (se pierden), editar el contenedor que corre, confiar en latest, y publicar el puerto olvidando la VM. (Semana 07)"}
 ];
 
-let qs=[], sel=[], marked=[], cur=0, t=null, secs=40*60;
+let qs=[], sel=[], marked=[], cur=0, t=null, secs=0, timed=true;
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function startExam(){
+  const tv=document.querySelector('input[name=tmin]:checked');
+  const mins=tv?parseInt(tv.value):40;
+  timed=mins>0; secs=timed?mins*60:0;
   qs=shuffle(BANK.map((b,i)=>({idx:i,q:b,opts:shuffle(b.o.map((t,k)=>({t,k})))})));
   sel=Array(qs.length).fill(null).map(()=>[]); marked=Array(qs.length).fill(false); cur=0;
   document.getElementById('start').classList.add('hide'); document.getElementById('results').classList.add('hide');
   document.getElementById('exam').classList.remove('hide');
-  document.getElementById('timer').classList.remove('hide');
+  const tEl=document.getElementById('timer');
+  if(timed){ tEl.classList.remove('hide'); tEl.classList.remove('warn'); t=setInterval(tick,1000); }
+  else { tEl.textContent='∞'; tEl.classList.remove('hide'); }
   document.getElementById('nq') && (document.getElementById('nq').textContent=qs.length);
-  t=setInterval(tick,1000); render();
+  render();
 }
 function tick(){
+  if(!timed) return;
   secs--; const m=String(Math.floor(secs/60)).padStart(2,'0'), s=String(secs%60).padStart(2,'0');
   const el=document.getElementById('timer'); el.textContent=m+':'+s;
   if(secs<=300) el.classList.add('warn');
