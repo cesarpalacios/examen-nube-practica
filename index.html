@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examen de Práctica — Gestión de Tecnologías en la Nube</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',Arial,sans-serif; background:#eaeded; color:#16191f; }
+.hdr { background:#232f3e; color:#fff; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+.hdr h1 { font-size:15px; font-weight:600; }
+.hdr .sub { font-size:11.5px; color:#d5dbdb; margin-top:2px; }
+.timer { background:#ec7211; color:#fff; font-weight:700; padding:8px 16px; border-radius:6px; font-size:18px; font-variant-numeric:tabular-nums; }
+.timer.warn { background:#d1325c; animation:pulse 1s infinite; }
+@keyframes pulse { 50% { opacity:.75; } }
+.main { max-width:880px; margin:16px auto; padding:0 14px; }
+.card { background:#fff; border:1px solid #d5dbdb; border-radius:8px; padding:20px; margin-bottom:14px; }
+.qmeta { display:flex; justify-content:space-between; font-size:12px; color:#545b64; margin-bottom:10px; flex-wrap:wrap; gap:6px; }
+.qmeta .dom { background:#232f3e; color:#fff; padding:3px 10px; border-radius:10px; font-size:11px; }
+.qtext { font-size:16.5px; font-weight:600; line-height:1.45; margin-bottom:14px; }
+.multitag { color:#d1325c; font-size:12px; font-weight:700; margin-bottom:10px; }
+.opt { display:flex; gap:10px; align-items:flex-start; border:1.5px solid #d5dbdb; border-radius:8px; padding:12px 14px; margin-bottom:9px; cursor:pointer; transition:all .12s; font-size:14.5px; line-height:1.4; }
+.opt:hover { border-color:#146eb4; background:#f2f8fd; }
+.opt.sel { border-color:#146eb4; background:#e8f2fb; box-shadow:0 0 0 1px #146eb4; }
+.opt .let { min-width:26px; height:26px; border-radius:50%; border:1.5px solid #879596; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700; }
+.opt.sel .let { background:#146eb4; border-color:#146eb4; color:#fff; }
+.nav { display:flex; justify-content:space-between; gap:10px; margin:14px 0; flex-wrap:wrap; }
+.btn { background:#232f3e; color:#fff; border:none; padding:11px 22px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; }
+.btn:hover { background:#37475a; }
+.btn.sec { background:#fff; color:#232f3e; border:1.5px solid #d5dbdb; }
+.btn.orange { background:#ec7211; }
+.btn:disabled { opacity:.4; cursor:default; }
+.grid { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.gq { width:34px; height:34px; border:1.5px solid #d5dbdb; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:12.5px; cursor:pointer; background:#fff; }
+.gq.answered { background:#146eb4; color:#fff; border-color:#146eb4; }
+.gq.current { box-shadow:0 0 0 2.5px #ec7211; }
+.gq.marked { border-color:#ec7211; }
+.hide { display:none; }
+.startbox { text-align:center; padding:34px 20px; }
+.startbox h2 { font-size:21px; margin-bottom:10px; }
+.startbox p { color:#545b64; font-size:14px; line-height:1.6; max-width:560px; margin:0 auto 18px; }
+.bigbtn { background:#ec7211; color:#fff; font-size:17px; padding:14px 34px; border:none; border-radius:8px; font-weight:700; cursor:pointer; }
+.bigbtn:hover { background:#f08b45; }
+.score { text-align:center; padding:10px 0 4px; }
+.score .pct { font-size:52px; font-weight:800; color:#232f3e; }
+.score .nota { font-size:20px; font-weight:700; color:#ec7211; margin:4px 0 10px; }
+.fb { border:1px solid #d5dbdb; border-radius:8px; padding:12px 14px; margin-bottom:10px; font-size:13.5px; }
+.fb.ok { border-left:5px solid #1d8102; }
+.fb.bad { border-left:5px solid #d1325c; }
+.fb b.q { display:block; margin-bottom:6px; font-size:14px; }
+.domrow { margin:8px 0; font-size:13px; }
+.dombar { background:#eaeded; border-radius:6px; height:16px; margin-top:3px; overflow:hidden; }
+.domfill { height:100%; background:#146eb4; }
+footer { text-align:center; font-size:11px; color:#879596; padding:16px; }
+@media (max-width:600px){ .qtext{font-size:15px} .timer{font-size:15px; padding:6px 12px} }
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div>
+    <h1>Examen de Práctica — Gestión de Tecnologías en la Nube</h1>
+    <div class="sub">Universidad Nacional de Colombia · Sede Manizales · Formato de práctica tipo certificación · Semanas 1–7</div>
+  </div>
+  <div class="timer hide" id="timer">40:00</div>
+</div>
+<div class="main">
+
+  <div class="card startbox" id="start">
+    <h2>Simulacro del examen de conceptos</h2>
+    <p>Entrena con el formato de los exámenes de certificación de nube: <b id="nq"></b> preguntas de opción única y de selección múltiple, un tiempo límite de <b>40 minutos</b>, revisión antes de entregar y resultado con nota sobre 5.0 y retroalimentación por dominio.</p>
+    <p style="font-size:12.5px">Las preguntas cubren: fundamentos de la nube y características NIST, modelos de servicio y responsabilidad compartida, proveedores y costos, virtualización e hipervisores, y contenedores con Docker — todo con base en las presentaciones del curso.</p>
+    <button class="bigbtn" onclick="startExam()">Comprar simulacro → Iniciar</button>
+    <p style="font-size:11px;color:#879596;margin-top:12px">(El botón dice "iniciar": aquí no se cobra nada. La gracia de la nube es que solo pagas lo que usas.)</p>
+  </div>
+
+  <div id="exam" class="hide">
+    <div class="card">
+      <div class="qmeta"><span class="dom" id="qdom"></span><span id="qnum"></span></div>
+      <div class="qtext" id="qtext"></div>
+      <div class="multitag hide" id="mtag">▸ Selecciona TODAS las respuestas correctas</div>
+      <div id="opts"></div>
+    </div>
+    <div class="nav">
+      <button class="btn sec" id="bprev" onclick="nav(-1)">← Anterior</button>
+      <button class="btn sec" onclick="mark()">Marcar para revisar</button>
+      <button class="btn" id="bnext" onclick="nav(1)">Siguiente →</button>
+    </div>
+    <div class="card">
+      <div style="font-size:12.5px;color:#545b64;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px">
+        <span>Respondidas: <b id="cnt"></b></span><span>Navega con la grilla · naranja = marcada · azul = respondida</span>
+      </div>
+      <div class="grid" id="grid"></div>
+      <button class="btn orange" style="width:100%;margin-top:14px" onclick="review()">Entregar examen</button>
+    </div>
+  </div>
+
+  <div id="results" class="hide">
+    <div class="card score">
+      <div style="font-size:13px;color:#545b64">RESULTADO DEL SIMULACRO</div>
+      <div class="pct" id="pct"></div>
+      <div class="nota" id="nota"></div>
+      <div style="font-size:13px;color:#545b64" id="aprob"></div>
+      <div style="margin-top:16px;text-align:left" id="doms"></div>
+      <button class="btn orange" style="margin-top:16px" onclick="location.reload()">Intentar de nuevo</button>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom:12px;font-size:16px">Revisión por pregunta</h3>
+      <div id="fblist"></div>
+    </div>
+  </div>
+
+</div>
+<footer>Material de práctica basado en las presentaciones del curso · Uso educativo · Profesor: Cesar Augusto Palacios Alarcón</footer>
+
+<script>
+const BANK = [
+ // D1 Fundamentos
+ {d:"Fundamentos de la nube", q:"Según la definición de AWS vista en clase, la computación en la nube es:", o:["La entrega bajo demanda de recursos de TI por internet con pago por uso","Un centro de datos que se alquila por completo a una empresa","Un software que se instala en los servidores propios para virtualizarlos","Un tipo de servidor más potente ubicado en otro país"], a:[0], j:"Definición de AWS: on-demand delivery of compute power, databases, storage, applications… pay-as-you-go. (Semana 01, Qué es Cloud)"},
+ {d:"Fundamentos de la nube", q:"¿Cuál de las siguientes NO es una de las cinco características esenciales del modelo NIST para que algo sea realmente nube?", o:["Autoservicio bajo demanda","Servicio medido","Soporte técnico dedicado permanente","Elasticidad rápida"], a:[2], j:"Las cinco son: autoservicio bajo demanda, acceso amplio por red, fondo común de recursos, elasticidad rápida y servicio medido. Si le falta una, casi siempre es alojamiento tradicional. (Semana 01)"},
+ {d:"Fundamentos de la nube", q:"La analogía de la clase compara la nube con la red eléctrica porque:", o:["Ambas usan cables de fibra óptica","Convierten un activo que había que comprar (planta eléctrica / centro de datos) en un servicio que se consume","Ambas son tecnologías que nacieron en la misma década","La electricidad también se almacena en la nube"], a:[1], j:"Hace cien años cada fábrica tenía su planta; hoy se conecta a la red y paga lo que consume. La nube hizo lo mismo con el cómputo. (Semana 01)"},
+ {d:"Fundamentos de la nube", q:"Mover una carga a la nube convierte el gasto de capital (CapEx) en:", o:["Gasto de operación (OpEx): pagar por lo que se consume","Una inversión no deducible","Un pasivo a largo plazo","Un crédito con el proveedor"], a:[0], j:"Antes: comprar la capacidad con años de anticipación. Ahora: pago por uso, decisión reversible. (Semana 01, glosario CapEx/OpEx)"},
+ {d:"Fundamentos de la nube", q:"La diferencia entre elasticidad y escalabilidad es:", o:["Son sinónimos","Escalabilidad es crecer para atender más carga; elasticidad es subir Y bajar con la demanda real","Elasticidad solo aplica a almacenamiento; escalabilidad solo a cómputo","Escalabilidad es automática; elasticidad es manual"], a:[1], j:"Glosario de la semana 01: escalabilidad = crecer sin degradar; elasticidad = ajuste hacia arriba y hacia abajo según demanda."},
+ {d:"Fundamentos de la nube", q:"El caso del día de matrícula (el sistema se cae cuando más importa) se resuelve con cuál característica:", o:["Fondo común de recursos","Acceso amplio por red","Elasticidad rápida","Servicio medido"], a:[2], j:"La elasticidad es la respuesta al día de matrícula: capacidad que crece y decrece con la demanda. (Semana 01)"},
+ {d:"Fundamentos de la nube", q:"¿Cuál de estos NO es uno de los seis pilares del AWS Well-Architected Framework?", o:["Optimización de costos","Sostenibilidad","Transparencia total","Eficacia del rendimiento"], a:[2], j:"Los seis pilares: excelencia operativa, seguridad, fiabilidad, eficacia del rendimiento, optimización de costos y sostenibilidad. (Semana 01)"},
+ {d:"Fundamentos de la nube", q:"(Selecciona 2) ¿Cuáles de estas son pilares del AWS Well-Architected Framework?", o:["Fiabilidad","Elasticidad permanente","Excelencia operativa","Velocidad de despliegue"], a:[0,2], j:"Los seis: excelencia operativa, seguridad, fiabilidad, eficacia del rendimiento, optimización de costos, sostenibilidad. (Semana 01)"},
+ {d:"Fundamentos de la nube", q:"Según la clase, un servicio que no cumple las cinco características NIST es:", o:["Una nube híbrida","Alojamiento tradicional vendido con el nombre de moda","Una nube privada","Un servicio gestionado"], a:[1], j:"Si no cumple las cinco, casi siempre es alojamiento tradicional vendido con el nombre de moda. (Semana 01)"},
+ // D2 Modelos de servicio
+ {d:"Modelos de servicio", q:"En el modelo de responsabilidad compartida, la 'seguridad DE la nube' corresponde a:", o:["El cliente","El proveedor: instalaciones físicas, hardware, hipervisor y disponibilidad de regiones","Ambos por igual","El auditor externo"], a:[1], j:"El proveedor responde por la seguridad DE la nube (infraestructura); el cliente por la seguridad EN la nube (datos, permisos, configuración). (Semana 02)"},
+ {d:"Modelos de servicio", q:"¿Qué capa de la pila NUNCA deja de ser responsabilidad del cliente, en ningún modelo de servicio?", o:["El sistema operativo","El middleware","Los datos","El motor de ejecución"], a:[2], j:"Los datos nunca dejan de ser responsabilidad del cliente. (Semana 02, la pila de 8 capas)"},
+ {d:"Modelos de servicio", q:"En IaaS, ¿quién parcha y actualiza el sistema operativo?", o:["El proveedor","El cliente","Nadie: no hay sistema operativo","El regulador"], a:[1], j:"En IaaS usted administra sistema operativo, middleware, datos y aplicación: parches, respaldos y monitoreo siguen siendo suyos. (Semana 02)"},
+ {d:"Modelos de servicio", q:"En la analogía de la pizza, el SaaS corresponde a:", o:["Pizza en casa (control total)","Pizza congelada (base lista)","Pizza a domicilio","Pizza en el restaurante (solo se sienta y come)"], a:[3], j:"En el restaurante: no pone nada — ni horno ni mesa. Tampoco elige cómo se cocina. (Semana 02)"},
+ {d:"Modelos de servicio", q:"AWS Elastic Beanstalk, Azure App Service y Google App Engine son ejemplos de:", o:["IaaS","PaaS","SaaS","FaaS"], a:[1], j:"PaaS: usted sube su código y la plataforma lo corre, escala y actualiza. (Semana 02)"},
+ {d:"Modelos de servicio", q:"¿Qué modelo tiene el riesgo MÁS ALTO de bloqueo del proveedor (vendor lock-in)?", o:["IaaS","PaaS","SaaS — y los datos también quedan atados","Todos por igual"], a:[2], j:"Comparativa de decisión: en SaaS el bloqueo es muy alto, y los datos también viven en la plataforma del proveedor. (Semana 02)"},
+ {d:"Modelos de servicio", q:"Al pasar de IaaS a PaaS, la capa que deja de administrar usted es:", o:["Los datos","La aplicación","El sistema operativo y el motor de ejecución","Nada: PaaS administra todo"], a:[2], j:"En PaaS el proveedor entrega además el sistema operativo, el motor de ejecución y las herramientas de despliegue. (Semana 02)"},
+ {d:"Modelos de servicio", q:"Según la clase, la mayoría de las filtraciones de datos en la nube ocurren por:", o:["Fallas del hipervisor del proveedor","Errores del cliente en la nube: un permiso mal puesto o una configuración equivocada","Ataques al centro de datos","El propio proveedor que mira los datos"], a:[1], j:"La mayoría ocurren en la seguridad EN la nube: un permiso mal puesto, no una falla del proveedor. (Semana 02)"},
+ {d:"Modelos de servicio", q:"AWS Lambda, donde se ejecuta una función suelta cuando ocurre un evento sin servidor visible, es:", o:["IaaS","FaaS (Function as a Service)","SaaS","BaaS"], a:[1], j:"FaaS: se ejecuta una función por evento, sin servidor que administrar ni pagar mientras no se usa. (Semana 02)"},
+ {d:"Modelos de servicio", q:"(Selecciona 2) ¿Cuáles son dos de los TRES modelos de servicio canónicos?", o:["IaaS","BaaS","PaaS","NaaS"], a:[0,2], j:"Los tres canónicos: IaaS, PaaS y SaaS. FaaS, BaaS y NaaS aparecieron después, aplicando el mismo principio a otras capas. (Semana 02)"},
+ {d:"Modelos de servicio", q:"El error de la IPS que contrató un SaaS para su historia clínica y no pudo cumplir la normativa colombiana enseña que:", o:["SaaS siempre es la peor opción","Hay que preguntar por restricciones, integraciones y salida ANTES de firmar el contrato","Las IPS no pueden usar nube","El proveedor siempre responde por los datos"], a:[1], j:"Caso de la semana 02: restricciones legales, integraciones rígidas y costo de salida se preguntan antes de firmar. (Semana 02)"},
+ // D3 Proveedores y costos
+ {d:"Proveedores y costos", q:"El servicio de almacenamiento de objetos se llama S3 en AWS, Cloud Storage en Google Cloud y en Azure:", o:["Azure Files","Blob Storage","Azure Disk Storage","Cosmos DB"], a:[1], j:"Tabla de equivalencias: S3 = Blob Storage = Cloud Storage. Aprenda el concepto, no el nombre comercial. (Semana 04)"},
+ {d:"Proveedores y costos", q:"En Google Cloud, el equivalente de Amazon EC2 (máquina virtual) es:", o:["Google Compute Engine","Google App Engine","Google Kubernetes Engine","Cloud Functions"], a:[0], j:"EC2 = Virtual Machines (Azure) = Compute Engine (Google). (Semana 04)"},
+ {d:"Proveedores y costos", q:"Google Cloud destaca especialmente (según su origen) en:", o:["Identidad corporativa y licenciamiento","Análisis de datos, aprendizaje automático y contenedores (Kubernetes salió de ahí)","Amplitud de su catálogo de servicios","Precios más bajos garantizados"], a:[1], j:"GCP trae a producto lo que construyó para sí misma: datos, análisis y contenedores. Kubernetes salió de ahí. (Semana 04)"},
+ {d:"Proveedores y costos", q:"Las CUATRO palancas de la factura de un proveedor de nube son:", o:["Cómpito, almacenamiento, servicios administrados y transferencia de datos","CPU, RAM, disco y red","Licencias, soporte, capacitación y migración","Región, zona, instancia y volumen"], a:[0], j:"Quien entiende estas cuatro puede leer cualquier cotización. (Semana 04)"},
+ {d:"Proveedores y costos", q:"La palanca de la factura que 'la nadie cotica y la que más crece' es:", o:["El cómputo","El almacenamiento","La transferencia de datos: meter suele ser gratis, SACAR no","Los servicios administrados"], a:[2], j:"Meter datos suele ser gratis; sacarlos, no. También se cobra el tráfico entre regiones. Es la línea que nadie cotiza y la que más crece. (Semana 04)"},
+ {d:"Proveedores y costos", q:"Lo que ATA DE VERDAD a un proveedor de nube, más que la tecnología, es:", o:["Las máquinas virtuales","Los datos acumulados, el equipo capacitado en una sola consola y los contratos de gasto","Los contenedores y Kubernetes","Las funciones sin servidor"], a:[1], j:"Casi nunca es la tecnología: son los datos (volumen y costo de salida), la gente y la firma. (Semana 04)"},
+ {d:"Proveedores y costos", q:"(Selecciona 2) ¿Cuáles de estos son criterios para elegir proveedor vistos en clase?", o:["Restricciones legales y de jurisdicción","Tamaño total del catálogo del proveedor","Talento disponible y curva de aprendizaje","Cantidad de servicios con el nombre más conocido"], a:[0,2], j:"Siete criterios; los legales eliminan candidatos antes de comparar precios, y el talento disponible es parte del costo. Elegir por tamaño del catálogo es un error. (Semana 04)"},
+ // D4 Virtualización
+ {d:"Virtualización", q:"Un hipervisor TIPO 1 (bare metal) se caracteriza por:", o:["Instalarse como una aplicación sobre Windows o macOS","Correr directamente sobre el hardware: es el sistema operativo del servidor","Solo funcionar en portátiles","Requerir obligatoriamente Windows como anfitrión"], a:[1], j:"Tipo 1: directo sobre hardware (ESXi, Hyper-V, KVM, Xen, AWS Nitro). Tipo 2: sobre un SO anfitrión (VirtualBox, Parallels). (Semana 06)"},
+ {d:"Virtualización", q:"¿Cuál de los siguientes es un hipervisor TIPO 2 (alojado)?", o:["VMware ESXi","Amazon Nitro","VirtualBox","Microsoft Hyper-V"], a:[2], j:"Tipo 2: se instala como una aplicación sobre el SO anfitrión — VirtualBox, VMware Workstation, Parallels. (Semana 06)"},
+ {d:"Virtualización", q:"El orden correcto de las capas de una máquina virtual, de abajo hacia arriba, es:", o:["Aplicación → SO invitado → hipervisor → hardware físico","Hardware físico → hipervisor → SO invitado → bibliotecas/aplicación","Hipervisor → hardware → aplicación → SO invitado","SO invitado → hardware → hipervisor → aplicación"], a:[1], j:"Hardware físico, hipervisor (reparte recursos y aísla), SO invitado (completo, propio de cada VM), bibliotecas y aplicación. (Semana 06)"},
+ {d:"Virtualización", q:"En EC2, una AMI es:", o:["El firewall de la instancia","Una imagen con el sistema operativo listo para arrancar (el 'disco de instalación')","El tipo de instancia que define vCPU y memoria","La llave privada para SSH"], a:[1], j:"AMI = imagen con SO listo; tipo de instancia = tamaño; EBS = disco; grupo de seguridad = firewall; par de llaves = llave de la puerta. (Semana 06)"},
+ {d:"Virtualización", q:"El 'vecino ruidoso' en virtualización se refiere a:", o:["Un usuario que habla en el centro de datos","Otra VM en el mismo host físico que consume disco o red y afecta el rendimiento de la suya","Un error del hipervisor","Una VM encendida sin uso"], a:[1], j:"Desventaja de virtualizar: el rendimiento puede variar por otras VMs en el mismo host. (Semana 06)"},
+ {d:"Virtualización", q:"AWS lanzó EC2 en 2006 sobre el hipervisor Xen y hoy usa:", o:["VMware ESXi","Nitro, basado en KVM","Hyper-V","VirtualBox"], a:[1], j:"2017: AWS migra a Nitro, un hipervisor basado en KVM con hardware dedicado. (Semana 06)"},
+ // D5 Contenedores y Docker
+ {d:"Contenedores y Docker", q:"Un contenedor es:", o:["Una máquina virtual más pequeña","Un proceso aislado que lleva la aplicación con sus bibliotecas y configuración, compartiendo el núcleo del anfitrión","Un servidor físico dedicado a una aplicación","Una imagen de disco completa con sistema operativo"], a:[1], j:"A diferencia de la VM, el contenedor virtualiza el sistema operativo, no el hardware. (Semana 07)"},
+ {d:"Contenedores y Docker", q:"Las dos piezas del núcleo de Linux que hacen posibles los contenedores son:", o:["namespaces (qué ve el proceso) y cgroups (cuánto puede usar)","docker y docker-compose","FROM y COPY","El hipervisor y el SO invitado"], a:[0], j:"Namespaces: qué ve el proceso. Cgroups: cuánto puede usar. (Semana 07)"},
+ {d:"Contenedores y Docker", q:"La diferencia entre imagen y contenedor es:", o:["Ninguna: son lo mismo","La imagen es la plantilla de solo lectura; el contenedor es esa imagen en ejecución (como la AMI y la instancia)","La imagen corre en la nube y el contenedor en local","El contenedor es la plantilla y la imagen la ejecución"], a:[1], j:"Imagen = plantilla (la AMI); contenedor = imagen en ejecución (la instancia): se crea, se detiene y se borra. (Semana 07)"},
+ {d:"Contenedores y Docker", q:"En un Dockerfile, la instrucción EXPOSE:", o:["Abre el puerto en el firewall de la nube","Publica el puerto en el anfitrión","Documenta en qué puerto escucha el contenedor; no abre nada por sí sola","Es obligatoria para que funcione la aplicación"], a:[2], j:"EXPOSE solo documenta. Publicar es -p ANFITRIÓN:CONTENEDOR, y el grupo de seguridad es otra puerta aparte. (Semana 07)"},
+ {d:"Contenedores y Docker", q:"Con docker run -p 8080:80, ¿qué puerto se abre en el grupo de seguridad de la instancia EC2?", o:["El 80 (del contenedor)","El 8080 (el del ANFITRIÓN)","Ambos","Ninguno: Docker los abre solos"], a:[1], j:"Se lee ANFITRIÓN:CONTENEDOR. El grupo de seguridad se abre con el número del anfitrión (8080). (Semana 07)"},
+ {d:"Contenedores y Docker", q:"Los datos guardados dentro del contenedor (en su capa de escritura):", o:["Quedan guardados para siempre","Se pierden cuando el contenedor se borra; lo que debe durar va en un volumen","Se respaldan automáticamente a S3","Se sincronizan con el repositorio"], a:[1], j:"El contenedor agrega una capa delgada de escritura que desaparece con él. Lo que debe durar va en un volumen. (Semana 07)"},
+ {d:"Contenedores y Docker", q:"Docker Compose se usa para:", o:["Construir una sola imagen más rápido","Describir y levantar varios contenedores juntos con un archivo versionado en el repositorio","Reemplazar el grupo de seguridad","Administrar máquinas virtuales"], a:[1], j:"Compose reemplaza comandos largos por un archivo legible que puede levantar sitio, API y base de datos en una misma red. (Semana 07)"},
+ {d:"Contenedores y Docker", q:"En AWS, la opción de correr contenedores SIN servidores a la vista (usted entrega la imagen y AWS la ejecuta) es:", o:["Docker en EC2","Amazon ECS","Amazon EKS","Fargate / App Runner"], a:[3], j:"De más control a menos administración: Docker en EC2 → ECS → EKS → Fargate/App Runner. (Semana 07)"},
+ {d:"Contenedores y Docker", q:"La frase «en mi máquina funciona» que motiva los contenedores se refiere a:", o:["Que el hardware del desarrollador es mejor","Que el código no viaja con sus versiones, bibliotecas y configuración — el contenedor empaca el entorno","Que los servidores de producción son lentos","Un problema de red siempre"], a:[1], j:"El código es el mismo; lo que no viajó son versiones, bibliotecas y configuración. El contenedor es la respuesta técnica. (Semana 07)"},
+ {d:"Contenedores y Docker", q:"(Selecciona 2) ¿Cuáles de estos son errores frecuentes con contenedores vistos en clase?", o:["Guardar datos dentro del contenedor","Versionar la imagen base en producción","Confiar en la etiqueta latest","Usar docker compose down al terminar"], a:[0,2], j:"Errores: datos dentro del contenedor (se pierden), editar el contenedor que corre, confiar en latest, y publicar el puerto olvidando la VM. (Semana 07)"}
+];
+
+let qs=[], sel=[], marked=[], cur=0, t=null, secs=40*60;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function startExam(){
+  qs=shuffle(BANK.map((b,i)=>({idx:i,q:b,opts:shuffle(b.o.map((t,k)=>({t,k})))})));
+  sel=Array(qs.length).fill(null).map(()=>[]); marked=Array(qs.length).fill(false); cur=0;
+  document.getElementById('start').classList.add('hide'); document.getElementById('results').classList.add('hide');
+  document.getElementById('exam').classList.remove('hide');
+  document.getElementById('timer').classList.remove('hide');
+  document.getElementById('nq') && (document.getElementById('nq').textContent=qs.length);
+  t=setInterval(tick,1000); render();
+}
+function tick(){
+  secs--; const m=String(Math.floor(secs/60)).padStart(2,'0'), s=String(secs%60).padStart(2,'0');
+  const el=document.getElementById('timer'); el.textContent=m+':'+s;
+  if(secs<=300) el.classList.add('warn');
+  if(secs<=0){clearInterval(t); finish();}
+}
+function render(){
+  const it=qs[cur];
+  document.getElementById('qdom').textContent=it.q.d;
+  document.getElementById('qnum').textContent='Pregunta '+(cur+1)+' de '+qs.length+(marked[cur]?' · 🔶 marcada':'');
+  document.getElementById('qtext').textContent=it.q.q;
+  document.getElementById('mtag').classList.toggle('hide', it.q.a.length<2);
+  const box=document.getElementById('opts'); box.innerHTML='';
+  it.opts.forEach((o,i)=>{
+    const d=document.createElement('div'); d.className='opt'+(sel[cur].includes(i)?' sel':'');
+    d.innerHTML='<div class="let">'+String.fromCharCode(65+i)+'</div><div>'+o.t+'</div>';
+    d.onclick=()=>{
+      if(it.q.a.length<2){ sel[cur]=[i]; } else {
+        const p=sel[cur].indexOf(i); p>=0?sel[cur].splice(p,1):sel[cur].push(i);
+      } render();
+    };
+    box.appendChild(d);
+  });
+  document.getElementById('bprev').disabled=cur===0;
+  document.getElementById('bnext').textContent=cur===qs.length-1?'Última →':'Siguiente →';
+  const answered=sel.filter(s=>s.length).length;
+  document.getElementById('cnt').textContent=answered+' / '+qs.length;
+  const g=document.getElementById('grid'); g.innerHTML='';
+  qs.forEach((_,i)=>{
+    const b=document.createElement('div'); b.className='gq'+(sel[i].length?' answered':'')+(marked[i]?' marked':'')+(i===cur?' current':'');
+    b.textContent=i+1; b.onclick=()=>{cur=i;render();}; g.appendChild(b);
+  });
+}
+function nav(d){ const n=cur+d; if(n>=0&&n<qs.length){cur=n;render();} }
+function mark(){ marked[cur]=!marked[cur]; render(); }
+function review(){
+  const un=qs.filter((_,i)=>!sel[i].length).length;
+  if(un>0 && !confirm('Tienes '+un+' pregunta(s) sin responder. ¿Entregar de todas formas?')) return;
+  finish();
+}
+function finish(){
+  clearInterval(t);
+  document.getElementById('exam').classList.add('hide'); document.getElementById('timer').classList.add('hide');
+  let ok=0; const doms={};
+  const fb=document.getElementById('fblist'); fb.innerHTML='';
+  qs.forEach((it,i)=>{
+    const correct=it.opts.filter(o=>it.q.a.includes(o.k)).map(o=>o.t);
+    const got=sel[i].map(x=>it.opts[x].t);
+    const good=got.length===correct.length && got.every(g=>correct.includes(g));
+    if(good) ok++;
+    doms[it.q.d]=doms[it.q.d]||[0,0]; doms[it.q.d][1]++; if(good)doms[it.q.d][0]++;
+    const d=document.createElement('div'); d.className='fb '+(good?'ok':'bad');
+    d.innerHTML='<b class="q">'+(i+1)+'. '+(good?'✓':'✗')+' — '+it.q.d+'</b>'+it.q.q+
+      '<br><br><b>Correcta:</b> '+correct.join(' · ')+(good?'':('<br><b>Tu respuesta:</b> '+(got.join(' · ')||'(sin responder)')))+
+      '<br><br><i>'+it.q.j+'</i>';
+    fb.appendChild(d);
+  });
+  const pct=Math.round(100*ok/qs.length), nota=(5*pct/100).toFixed(1);
+  document.getElementById('pct').textContent=pct+'%';
+  document.getElementById('nota').textContent='Nota: '+nota+' / 5.0';
+  document.getElementById('aprob').textContent=pct>=60?'Aprobaste el umbral de práctica (≥60%). ¡Bien hecho!':'Debajo del umbral de práctica (60%): repasa los dominios en rojo y vuelve a intentar.';
+  const dd=document.getElementById('doms'); dd.innerHTML='<b style="font-size:13.5px">Desempeño por dominio</b>';
+  Object.keys(doms).forEach(k=>{
+    const [c,n]=doms[k], p=Math.round(100*c/n);
+    dd.innerHTML+='<div class="domrow">'+k+': <b>'+c+'/'+n+' ('+p+'%)</b><div class="dombar"><div class="domfill" style="width:'+p+'%"></div></div></div>';
+  });
+  document.getElementById('results').classList.remove('hide');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('nq').textContent=BANK.length;
+</script>
+</body>
+</html>
